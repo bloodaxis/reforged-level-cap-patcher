@@ -19,9 +19,9 @@ Run `bash uncap_reforged.sh` from this directory, or launch it by its full path.
 
 Start with a read-only check:
 
-- **Reforged 2.1.2.2 or 2.3.3.2:** option **1** checks the level-cap patches; option **2** applies them with backups.
+- **Reforged 2.1.2.2, 2.3.3.2, or 2.3.4.0:** option **1** checks the level-cap patches; option **2** applies them with backups.
 - **Every other Reforged version:** option **4** checks experimentally; option **5** offers experimental cap removal with confirmation. This is the route to try, not a guarantee of compatibility. Unsupported patterns are refused.
-- **Separate optional weapon-level scaling:** option **6** checks; option **7** disables it without changing the level cap. These edits were analyzed for **2.1.2.2 and 2.3.3.2**; unrecognized versions offer experimental analysis/confirmation.
+- **Separate optional weapon-level scaling:** option **6** checks; option **7** disables it without changing the level cap. These edits were analyzed for **2.1.2.2, 2.3.3.2, and 2.3.4.0**; unrecognized versions offer experimental analysis/confirmation.
 - **3** cancels.
 
 Recognition is based on code structure. Even in experimental mode, a matching analyzed structure uses the known patch. Experimental changes may or may not work in-game.
@@ -50,7 +50,7 @@ To undo an in-place patch, restore each changed file from its corresponding `.be
 
 The HKS edit reproduces the earlier change in `ERR_StatPointEffects`: comment out the branch that sums all eight stats, checks a total of at least 356 and event flag 9969, and applies effect 9658. The rest of the file, including its newline style, is preserved. By default this includes only the level-cap edit. Weapon-level scaling is a separate optional component.
 
-Recognized guard/sum patterns from 2.1.2.2 and 2.3.3.2 are stored alongside the ESD signatures. Different variable names or arithmetic can be analyzed experimentally, provided the full eight-stat/flag/effect relationship is recognizable. The code only parses integer arithmetic; it never executes Lua/HKS. Ambiguous, missing, or unsupported branches are refused. The prior `--[[...]]` commented form is detected as already patched.
+Recognized guard/sum patterns from 2.1.2.2, 2.3.3.2, and 2.3.4.0 are stored alongside the ESD signatures. Different variable names or arithmetic can be analyzed experimentally, provided the full eight-stat/flag/effect relationship is recognizable. The code only parses integer arithmetic; it never executes Lua/HKS. Ambiguous, missing, or unsupported branches are refused. The prior `--[[...]]` commented form is detected as already patched.
 
 An unknown HKS pattern triggers the same experimental confirmation as an unknown ESD, even when the other file uses a known patch. Declining leaves both inputs untouched.
 
@@ -74,13 +74,13 @@ python3 uncap_reforged.py "/path/to/c0000.hks" --weapon-scaling-only --in-place
 
 You can use it before or after removing the level cap. Existing scaling edits are preserved by cap-only actions. To restore scaling, use the HKS backup from before the scaling change. Already-applied scaling patches are detected.
 
-Known weapon-function patterns from 2.1.2.2 and 2.3.3.2 are recognized. Unknown but recognizable patterns require experimental confirmation before writing; `--experimental --weapon-scaling-only --check` allows a read-only experimental check. Missing or ambiguous weapon-level patterns are refused.
+Known weapon-function patterns from 2.1.2.2, 2.3.3.2, and 2.3.4.0 are recognized. Unknown but recognizable patterns require experimental confirmation before writing; `--experimental --weapon-scaling-only --check` allows a read-only experimental check. Missing or ambiguous weapon-level patterns are refused.
 
 The earlier `--disable-enemy-scaling` CLI option remains available for explicitly combining cap removal and scaling in one operation; the launchers use the independent action instead.
 
 ## Compatibility
 
-Recognizes the relevant structures from Reforged 2.1.2.2 and 2.3.3.2. It checks script structures and exact expression bytecode, not version numbers or whole-archive hashes. In the normal verified path, unrelated changes may be accepted; changed target logic or IDs are rejected unless experimental fallback is selected. Unsupported formats and incomplete/ambiguous patterns are still rejected. Future versions are not guaranteed to work.
+Recognizes the relevant structures from Reforged 2.1.2.2, 2.3.3.2, and 2.3.4.0. It checks script structures and exact expression bytecode, not version numbers or whole-archive hashes. In the normal verified path, unrelated changes may be accepted; changed target logic or IDs are rejected unless experimental fallback is selected. Unsupported formats and incomplete/ambiguous patterns are still rejected. Future versions are not guaranteed to work.
 
 The 2.3.3.2 output exactly reproduces a user-tested working cap removal and frozen-menu fix. The 2.1.2.2 output has passed structural checks but has not been tested in-game. Windows batch execution has not been tested on Windows.
 
@@ -125,3 +125,9 @@ HKS integration checks cover both analyzed versions, reproduction of the prior c
 Optional-scaling validation covers both analyzed versions, opt-in after cap removal, repeated runs, backup preservation, Bash separate scaling check/apply actions, experimental confirmation for changed weapon functions, and reproduction of the previous combined HKS edits (while preserving the input newline style).
 
 Separate-action validation confirms that scaling-only works on both versions without a talk archive, preserves the HKS cap branch, creates a backup, and detects repeated runs.
+
+## Reforged 2.3.4.0 analysis
+
+2.3.4.0 now uses the analyzed path for original and already-patched ESD/HKS files, including the optional weapon-scaling action. Its main level-triggered effects moved from state 44 to state 86; the known patch uses the profile-specific state location and verifies the complete resulting signatures. The experimental path remains available for other unrecognized structures.
+
+The original ESD was reconstructed from the saved byte-change audit, with all 14 inspection dumps matching the saved original inspection exactly. Original HKS reconstruction matched its saved SHA-256. Known-path outputs are checked against the previously validated 2.3.4.0 patched files. This is structural validation; successful in-game behavior has not been confirmed in this conversation.

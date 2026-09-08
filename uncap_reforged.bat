@@ -33,14 +33,14 @@ for %%F in ("uncap_reforged.py" "hks_patch.py" "experimental_patterns.py" "inspe
 
 echo Reforged level-cap removal and menu fix
 echo.
-echo Analyzed versions: Reforged 2.1.2.2 and 2.3.3.2.
+echo Analyzed versions: Reforged 2.1.2.2, 2.3.3.2, and 2.3.4.0.
 echo For every other version, use the experimental cap options 4/5.
 echo Experimental patches may or may not work; unsupported patterns are refused.
 echo Choose a check first. Checks do not change files; apply actions create backups.
 echo.
-echo 1) Check level-cap patch - Reforged 2.1.2.2 / 2.3.3.2
+echo 1) Check level-cap patch - Reforged 2.1.2.2 / 2.3.3.2 / 2.3.4.0
 echo    Checks the talk archive and c0000.hks without changing them.
-echo 2) Remove level cap - Reforged 2.1.2.2 / 2.3.3.2
+echo 2) Remove level cap - Reforged 2.1.2.2 / 2.3.3.2 / 2.3.4.0
 echo    Backs up and patches both files. Keeps weapon-level scaling unchanged.
 echo 3) Cancel
 echo 4) Experimental level-cap check - every other Reforged version
@@ -48,10 +48,10 @@ echo    Looks for compatible code patterns and validates a candidate in memory.
 echo 5) Experimental level-cap removal - every other Reforged version
 echo    Asks for confirmation before patching. In-game compatibility is unverified.
 echo 6) Check weapon-level scaling patch only - separate optional action
-echo    Analyzed for 2.1.2.2 / 2.3.3.2; other versions offer experimental analysis.
+echo    Analyzed for 2.1.2.2 / 2.3.3.2 / 2.3.4.0; other versions offer experimental analysis.
 echo 7) Disable weapon-level enemy scaling only - separate optional action
 echo    Edits only c0000.hks; keeps the level cap unchanged.
-echo    Analyzed for 2.1.2.2 / 2.3.3.2; other versions require experimental consent.
+echo    Analyzed for 2.1.2.2 / 2.3.3.2 / 2.3.4.0; other versions require experimental consent.
 echo.
 set "patch_extra="
 set "patch_scaling="

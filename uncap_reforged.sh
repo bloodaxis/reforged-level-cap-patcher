@@ -18,14 +18,14 @@ done
 
 printf 'Reforged level-cap removal and menu fix\n\n'
 printf '%s\n' \
-    'Analyzed versions: Reforged 2.1.2.2 and 2.3.3.2.' \
+    'Analyzed versions: Reforged 2.1.2.2, 2.3.3.2, and 2.3.4.0.' \
     'For every other version, use the experimental cap options 4/5.' \
     'Experimental patches may or may not work; unsupported patterns are refused.' \
     'Choose a check first. Checks do not change files; apply actions create backups.' \
     '' \
-    '1) Check level-cap patch - Reforged 2.1.2.2 / 2.3.3.2' \
+    '1) Check level-cap patch - Reforged 2.1.2.2 / 2.3.3.2 / 2.3.4.0' \
     '   Checks the talk archive and c0000.hks without changing them.' \
-    '2) Remove level cap - Reforged 2.1.2.2 / 2.3.3.2' \
+    '2) Remove level cap - Reforged 2.1.2.2 / 2.3.3.2 / 2.3.4.0' \
     '   Backs up and patches both files. Keeps weapon-level scaling unchanged.' \
     '3) Cancel' \
     '4) Experimental level-cap check - every other Reforged version' \
@@ -33,10 +33,10 @@ printf '%s\n' \
     '5) Experimental level-cap removal - every other Reforged version' \
     '   Asks for confirmation before patching. In-game compatibility is unverified.' \
     '6) Check weapon-level scaling patch only - separate optional action' \
-    '   Analyzed for 2.1.2.2 / 2.3.3.2; other versions offer experimental analysis.' \
+    '   Analyzed for 2.1.2.2 / 2.3.3.2 / 2.3.4.0; other versions offer experimental analysis.' \
     '7) Disable weapon-level enemy scaling only - separate optional action' \
     '   Edits only c0000.hks; keeps the level cap unchanged.' \
-    '   Analyzed for 2.1.2.2 / 2.3.3.2; other versions require experimental consent.' \
+    '   Analyzed for 2.1.2.2 / 2.3.3.2 / 2.3.4.0; other versions require experimental consent.' \
     ''
 extra=()
 while true; do

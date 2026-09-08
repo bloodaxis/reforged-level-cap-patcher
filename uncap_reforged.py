@@ -111,12 +111,12 @@ def signatures(source):
         return result
 
 
-def patch(original):
+def patch(original, effect_states=None):
     raw=zlib.decompress(original[0x4c:])
     patched=bytearray(raw)
     changes=[]
     effect_id=62
-    expected_effect_states={('t000001000.esd',1,44),('t000001300.esd',2147483646,10)}
+    expected_effect_states = {tuple(x) for x in effect_states} if effect_states is not None else {('t000001000.esd',1,44),('t000001300.esd',2147483646,10)}
     def constant(b):
         assert b[-1]==0xa1
         if len(b)==2 and b[0]<0x80: return b[0]-64
@@ -480,7 +480,7 @@ def main():
         print(f'ESD EXPERIMENTAL: recognized {len(findings)} linked cap/cost/menu families.')
     else:
         print('Recognized cap/menu structure: ' + ', '.join(p['label'] for p in matches))
-        result, changes = patch(original)
+        result, changes = patch(original, matches[0].get('effect_states'))
         with tempfile.TemporaryDirectory(prefix='err-uncap-verify-') as directory:
             candidate = pathlib.Path(directory, source.name)
             candidate.write_bytes(result)
