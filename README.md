@@ -9,11 +9,11 @@ Python 3.8 or newer, including its standard library. No pip packages, Wine, .NET
 
 ## Windows
 
-Double-click `uncap_reforged.bat`. Choose check, apply, cancel, experimental check, or apply with experimental fallback, then paste or drag the Reforged folder, its `mod` folder, or the talk archive. The program locates `mod/action/script/c0000.hks` automatically. Weapon-level scaling has its own separate check/apply menu entries (6 and 7). Apply backs up each changed file and patches both inputs. The window pauses to display the result.
+Double-click `uncap_reforged.bat`. Choose check, apply, cancel, experimental check, or apply with experimental fallback, then paste or drag the Reforged folder, its `mod` folder, or the talk archive. For level-cap removal, the program automatically locates both `mod/script/talk/m00_00_00_00.talkesdbnd.dcx` and `mod/action/script/c0000.hks`. Weapon-level scaling has its own separate check/apply menu entries (6 and 7). Apply backs up each changed file and patches both inputs. The window pauses to display the result.
 
 ## Linux
 
-Run `bash uncap_reforged.sh` from this directory, or launch it by its full path. Choose check, apply, cancel, experimental check, or apply with experimental fallback, then enter the Reforged folder, its `mod` folder, or the talk archive path. The matching `action/script/c0000.hks` is located automatically. Weapon-level scaling has its own separate check/apply menu entries (6 and 7). Spaces and surrounding quotes are supported.
+Run `bash uncap_reforged.sh` from this directory, or launch it by its full path. Choose check, apply, cancel, experimental check, or apply with experimental fallback, then enter the Reforged folder, its `mod` folder, or the talk archive path. For level-cap removal, the program automatically locates both `mod/script/talk/m00_00_00_00.talkesdbnd.dcx` and `mod/action/script/c0000.hks`. Weapon-level scaling has its own separate check/apply menu entries (6 and 7). Spaces and surrounding quotes are supported.
 
 ## Choosing a launcher option
 
