@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+*.zip
+*.bak
+*.dcx
+*.hks
+*.patch.json
