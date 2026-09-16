@@ -7,7 +7,7 @@ if ! command -v python3 >/dev/null 2>&1; then
     printf 'Python 3 is required but was not found.\n' >&2
     exit 1
 fi
-for dependency in uncap_reforged.py hks_patch.py experimental_patterns.py inspect_esd.py uncap-signatures.json \
+for dependency in uncap_reforged.py event_patch.py hks_patch.py experimental_patterns.py inspect_esd.py uncap-signatures.json \
     esdtool-v0.5.1/dist/ESDScriptingDocumentation_TalkER.xml \
     esdtool-v0.5.1/dist/ESDScriptingDocumentation_Talk.json; do
     if [[ ! -f "$script_dir/$dependency" ]]; then
@@ -37,10 +37,12 @@ printf '%s\n' \
     '7) Disable weapon-level enemy scaling only - separate optional action' \
     '   Edits only c0000.hks; keeps the level cap unchanged.' \
     '   Analyzed for 2.1.2.2 / 2.3.3.2 / 2.3.4.0; other versions require experimental consent.' \
+    '8) Check common-event player-level scaling patch - ERR 2.3.4.1 only' \
+    '9) Prevent common-event player-level scaling - ERR 2.3.4.1 only' \
     ''
 extra=()
 while true; do
-    read -r -p 'Choose [1/2/3/4/5/6/7]: ' choice || exit 0
+    read -r -p 'Choose [1/2/3/4/5/6/7/8/9]: ' choice || exit 0
     case "$choice" in
         1) mode=--check; break ;;
         2) mode=--in-place; break ;;
@@ -49,12 +51,16 @@ while true; do
         5) mode=--in-place; extra=(--experimental); break ;;
         6) mode=--check; extra=(--weapon-scaling-only); break ;;
         7) mode=--in-place; extra=(--weapon-scaling-only); break ;;
-        *) printf 'Enter a number from 1 to 7.\n' ;;
+        8) mode=--check; extra=(--player-scaling-only); break ;;
+        9) mode=--in-place; extra=(--player-scaling-only); break ;;
+        *) printf 'Enter a number from 1 to 9.\n' ;;
     esac
 done
 
 if [[ "$choice" == 6 || "$choice" == 7 ]]; then
     printf '\nPaste the Reforged/mod folder or c0000.hks path. This action changes weapon-level enemy scaling only.\n'
+elif [[ "$choice" == 8 || "$choice" == 9 ]]; then
+    printf '\nPaste the ERR 2.3.4.1/mod folder or common.emevd.dcx path. This prevents only common event 1049632091.\n'
 else
     printf '\nPaste the Reforged/mod folder or talk archive path. This action checks the level-cap patches in ESD and c0000.hks.\n'
 fi

@@ -78,6 +78,21 @@ Known weapon-function patterns from 2.1.2.2, 2.3.3.2, and 2.3.4.0 are recognized
 
 The earlier `--disable-enemy-scaling` CLI option remains available for explicitly combining cap removal and scaling in one operation; the launchers use the independent action instead.
 
+## Separate optional action: prevent common-event player-level scaling
+
+Launcher options **8** (check) and **9** (apply) target the original ERR **2.3.4.1** `mod/event/common.emevd.dcx`. The command-line equivalent is:
+
+```sh
+python3 uncap_reforged.py "/path/to/ERRv2.3.4.1" --player-scaling-only --check
+python3 uncap_reforged.py "/path/to/ERRv2.3.4.1" --player-scaling-only --in-place
+```
+
+This ends common event `1049632091` at entry. That prevents this event's selected enemy tier and rune adjustment from being applied; its remaining instructions and parameters stay in place but are unreachable. The patch requires an exact SHA-256 match of the decompressed original event file. A changed or unknown version is refused. In-place mode backs up `common.emevd.dcx` and writes a change report. A second run recognizes the patched file.
+
+The installed KRAK archive needs Reforged's Oodle library in `internals/launcher` or `mod/menu/deploy` for reading. The output uses supported DFLT DCX compression and contains only the 16-byte event instruction edit after decompression. Keep the output under its normal `mod/event/common.emevd.dcx` name when installing a separate output.
+
+This is an event-specific prevention patch. It does not disable map-local or DLC player-level scaling, reverse effects already active in a session, or change the displayed scaling setting. The event's initial flag clear is also skipped. Area balance and cross-event behavior have not been validated in game. The separate weapon-level scaling action is still needed to disable the HKS weapon input.
+
 ## Compatibility
 
 Recognizes the relevant structures from Reforged 2.1.2.2, 2.3.3.2, and 2.3.4.0. It checks script structures and exact expression bytecode, not version numbers or whole-archive hashes. In the normal verified path, unrelated changes may be accepted; changed target logic or IDs are rejected unless experimental fallback is selected. Unsupported formats and incomplete/ambiguous patterns are still rejected. Future versions are not guaranteed to work.
@@ -115,6 +130,7 @@ Validation covers exact reproduction of the confirmed working 2.3.3.2 archive, s
 - `uncap_reforged.py`: verified patcher and experimental fallback/confirmation flow.
 - `experimental_patterns.py`: experimental ESD structural recognizer and patcher.
 - `hks_patch.py`: known/experimental HKS cap and optional weapon-level-scaling recognition and patching.
+- `event_patch.py`: exact ERR 2.3.4.1 common-event prevention patch.
 - `uncap_reforged.sh` / `uncap_reforged.bat`: interactive launchers.
 - `inspect_esd.py`: archive inspector used by the patcher.
 - `uncap-signatures.json`: recognized original/patched ESD structures and HKS cap/weapon-function fingerprints.

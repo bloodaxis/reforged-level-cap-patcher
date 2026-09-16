@@ -24,7 +24,7 @@ goto dependencies
 set "python_cmd=python3"
 
 :dependencies
-for %%F in ("uncap_reforged.py" "hks_patch.py" "experimental_patterns.py" "inspect_esd.py" "uncap-signatures.json" "esdtool-v0.5.1\dist\ESDScriptingDocumentation_TalkER.xml" "esdtool-v0.5.1\dist\ESDScriptingDocumentation_Talk.json") do (
+for %%F in ("uncap_reforged.py" "event_patch.py" "hks_patch.py" "experimental_patterns.py" "inspect_esd.py" "uncap-signatures.json" "esdtool-v0.5.1\dist\ESDScriptingDocumentation_TalkER.xml" "esdtool-v0.5.1\dist\ESDScriptingDocumentation_Talk.json") do (
     if not exist "%tool_dir%%%~F" (
         echo Missing support file: "%tool_dir%%%~F"
         goto failure
@@ -52,11 +52,14 @@ echo    Analyzed for 2.1.2.2 / 2.3.3.2 / 2.3.4.0; other versions offer experimen
 echo 7) Disable weapon-level enemy scaling only - separate optional action
 echo    Edits only c0000.hks; keeps the level cap unchanged.
 echo    Analyzed for 2.1.2.2 / 2.3.3.2 / 2.3.4.0; other versions require experimental consent.
+echo 8) Check common-event player-level scaling patch - ERR 2.3.4.1 only
+echo 9) Prevent common-event player-level scaling - ERR 2.3.4.1 only
 echo.
 set "patch_extra="
 set "patch_scaling="
-choice /c 1234567 /n /m "Choose [1/2/3/4/5/6/7]: "
-if errorlevel 8 goto failure
+choice /c 123456789 /n /m "Choose [1/2/3/4/5/6/7/8/9]: "
+if errorlevel 9 goto player_apply
+if errorlevel 8 goto player_check
 if errorlevel 7 goto scaling_apply
 if errorlevel 6 goto scaling_check
 if errorlevel 5 goto experimental_apply
@@ -66,6 +69,12 @@ if errorlevel 2 goto apply
 if errorlevel 1 goto check
 goto failure
 
+:player_check
+set "patch_scaling=--player-scaling-only"
+goto check
+:player_apply
+set "patch_scaling=--player-scaling-only"
+goto apply
 :scaling_check
 set "patch_scaling=--weapon-scaling-only"
 goto check
@@ -86,7 +95,9 @@ set "patch_mode=--in-place"
 
 :ask_file
 echo.
-if defined patch_scaling (
+if "%patch_scaling%"=="--player-scaling-only" (
+    echo Paste or drag the ERR 2.3.4.1/mod folder, or common.emevd.dcx. This prevents only common event 1049632091.
+) else if defined patch_scaling (
     echo Paste or drag the Reforged/mod folder, or c0000.hks. This action changes weapon-level enemy scaling only.
 ) else (
     echo Paste or drag the Reforged/mod folder, or its talk archive. This action checks the level-cap patches in both files.

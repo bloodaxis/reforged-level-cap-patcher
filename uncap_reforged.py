@@ -418,6 +418,26 @@ def weapon_scaling_only(args):
     finish_bundle(items, args, experimental)
 
 
+def player_scaling_only(args):
+    from event_patch import plan_event
+    source = args.source.resolve(strict=True)
+    if source.is_dir():
+        found = [p for p in (source/'event/common.emevd.dcx',
+                             source/'mod/event/common.emevd.dcx') if p.is_file()]
+        if len(found) != 1:
+            raise ValueError('Select a Reforged/mod folder containing event/common.emevd.dcx')
+        source = found[0].resolve(strict=True)
+    if source.name != 'common.emevd.dcx':
+        raise ValueError('Select common.emevd.dcx or its Reforged/mod folder')
+    original = source.read_bytes()
+    result, changes, finding = plan_event(original, source)
+    print('Common event 1049632091: '+('already disabled.' if not changes else 'will end at entry.'))
+    destination = source if args.in_place else (args.output or source.with_name('common.no-player-level-scaling.emevd.dcx')).resolve()
+    items = [dict(source=source, original=original, result=result, destination=destination,
+                  method=finding['method'], changes=changes, findings=finding)]
+    finish_bundle(items, args, False)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('source', type=pathlib.Path, help='Reforged folder, mod folder, or talk archive')
@@ -428,16 +448,22 @@ def main():
     parser.add_argument('--hks', type=pathlib.Path, help='Explicit c0000.hks location when it cannot be inferred')
     parser.add_argument('--hks-output', type=pathlib.Path, help='Separate HKS output location')
     parser.add_argument('--weapon-scaling-only', action='store_true', help='Only disable weapon-level enemy scaling; do not patch the level cap or read the talk archive')
+    parser.add_argument('--player-scaling-only', action='store_true', help='Only prevent ERR 2.3.4.1 common event 1049632091; does not cover map/DLC scaling')
     parser.add_argument('--disable-enemy-scaling', action='store_true', help='Optional: disable enemy level scaling from weapon level via ERR_WeaponLevel')
     parser.add_argument('--esd-only', action='store_true', help='Explicitly perform the legacy talk-archive-only operation')
     parser.add_argument('--experimental', action='store_true', help='Allow unknown-pattern analysis; experimental writes still ask')
     args = parser.parse_args()
+    if args.player_scaling_only and (args.weapon_scaling_only or args.esd_only or args.hks or args.hks_output or args.disable_enemy_scaling or args.experimental):
+        parser.error('--player-scaling-only is a separate common-event action')
     if args.esd_only and (args.hks or args.hks_output or args.disable_enemy_scaling or args.weapon_scaling_only):
         parser.error('--esd-only cannot be combined with HKS options')
     if args.hks_output and args.in_place:
         parser.error('--hks-output cannot be combined with --in-place')
     if args.weapon_scaling_only:
         weapon_scaling_only(args)
+        return
+    if args.player_scaling_only:
+        player_scaling_only(args)
         return
     source = args.source.resolve(strict=True)
     if source.is_dir():
